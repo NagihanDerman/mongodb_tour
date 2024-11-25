@@ -7,13 +7,13 @@ const reviewRouter = require("./routes/reviewRoutes");
 //express uygulamasi olusturma
 const app = express();
 
-//middleware aktif ediyoruz
+//middleware aktif etme
 app.use(express.json());
 
-// router'ları projeye tanıt
+// router'lari projeye tanit
 app.use("/api/tours", tourRouter);
 app.use("/api/users", userRouter);
 app.use("/api/reviews", reviewRouter);
 
-//server.js de kullanmak iicn export
+//server.js de kullanmak icin export
 module.exports = app;

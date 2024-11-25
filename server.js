@@ -7,10 +7,10 @@ require("dotenv").config();
 mongoose
   .connect(process.env.MONGO_URL)
   .then(() => {
-    console.log("💥 Veritabanina baglandi");
+    console.log("💥✨ Veritabanina baglandi");
   })
   .catch((err) => {
-    console.error("🏀 Veritabanina baglanamadi", err.message);
+    console.error("🏀🥎 Veritabanina baglanamadi", err.message);
   });
 
 //express uygulamasi dinlemeye basla

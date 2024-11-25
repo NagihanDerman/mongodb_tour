@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-//veritabanina kaydedilecek olan verilei$rin schemasi/kisitlamalarinin yazilmasi
+//veritabanina kaydedilecek olan verilerin schemasi/kisitlamalarinin yazilmasi
 const tourSchema = new mongoose.Schema(
   {
     name: {

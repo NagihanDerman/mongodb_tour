@@ -1,12 +1,13 @@
 const express = require("express");
 const { getAllTours, createTours, getTour, deleteTour, updateTour } = require("../controllers/tourController");
+const formatQuery = require("../middleware/formatQuery");
 
 const router = express.Router();
 
 // ---- routes -----
 
 router.route("/")
-  .get(getAllTours)      // GET request to /tours
+  .get(formatQuery, getAllTours)      // GET request to /tours
   .post(createTours);     // POST request to /tours
 
 // Dynamic route for /tours/:id (getTour, deleteTours, and updateTours)
