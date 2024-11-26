@@ -1,10 +1,12 @@
 const express = require("express");
-const { getAllTours, createTours, getTour, deleteTour, updateTour } = require("../controllers/tourController");
+const { getAllTours, createTours, getTour, deleteTour, updateTour,  aliasTopTours, getTourStats,} = require("../controllers/tourController");
 const formatQuery = require("../middleware/formatQuery");
 
 const router = express.Router();
 
 // ---- routes -----
+router.route("/top-tours").get(aliasTopTours, getAllTours);//alias (yeniden adlandirma icin)
+router.route("/tour-stats").get(getTourStats); //raporlama icin
 
 router.route("/")
   .get(formatQuery, getAllTours)      // GET request to /tours

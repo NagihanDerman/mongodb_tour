@@ -14,7 +14,7 @@ class APIFeatures {
   }
 
   sort() {
-    // sort parametresi varsa sırala
+    // eğer sort parametresi varsa sırala
     if (this.params.sort) {
       this.query.sort(this.params.sort.split(",").join(" "));
     } else {
@@ -34,15 +34,19 @@ class APIFeatures {
   }
 
   pagination() {
-    // sayfalama yap
-    const page = Number(this.params.page) || 1; // mevcut sayfa sayısı
-    const limitCount = Number(this.params.limit) || 10; // sayfa basına dusen elaman sayısı
-    const skipCount = (page - 1) * limitCount; // mevcut sayfa icin kaç eleman atlanmalı
+  const page = Number(this.params.page) || 1; // varsayılan 1. sayfa
+  const limitCount = Number(this.params.limit) || 10; // varsayılan limit 10
+  const skipCount = (page - 1) * limitCount;
 
-    this.query.skip(skipCount).limit(limitCount);
-
-    return this;
+  // Sayfa sayısı 1'den küçükse, bunu 1 olarak ayarla
+  if (page < 1) {
+    page = 1;
   }
+
+  this.query.skip(skipCount).limit(limitCount);
+  
+  return this;
+}
 }
 
 module.exports = APIFeatures;
