@@ -1,5 +1,5 @@
 const express = require("express");
-const { getAllTours, createTours, getTour, deleteTour, updateTour,  aliasTopTours, getTourStats,} = require("../controllers/tourController");
+const { getAllTours, createTours, getTour, deleteTour, updateTour,  aliasTopTours, getTourStats,getMonthlyPlan} = require("../controllers/tourController");
 const formatQuery = require("../middleware/formatQuery");
 
 const router = express.Router();
@@ -7,7 +7,7 @@ const router = express.Router();
 // ---- routes -----
 router.route("/top-tours").get(aliasTopTours, getAllTours);//alias (yeniden adlandirma icin)
 router.route("/tour-stats").get(getTourStats); //raporlama icin
-
+router.route("/monthly-plan/:year").get(getMonthlyPlan);
 router.route("/")
   .get(formatQuery, getAllTours)      // GET request to /tours
   .post(createTours);     // POST request to /tours

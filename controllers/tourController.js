@@ -80,7 +80,8 @@ exports.aliasTopTours = (req, res, next) => {
 
 //! rapor oluşturup gönderme
 // zorluga gore gruplandirarak istatistik hesaplama
-exports.getTourStats = (async (req, res, next) => {
+exports.getTourStats = async (req, res,) => {
+  
   //! Aggeregation Pipeline
   // Raporlama Adimlari
   const stats = await Tour.aggregate([
@@ -99,9 +100,79 @@ exports.getTourStats = (async (req, res, next) => {
     },
     // 3- gruplanan veriyi fiyata gore sirala
     { $sort: { avgPrice: 1 } },
-    // 4- fiyatı 500'den buyul olanlari al
+    // 4- fiyatı 500'den buyul olanlariagg al
     { $match: { avgPrice: { $gte: 500 } } },
   ]);
 
   return res.status(200).json({ message: "Rapor Oluşturuldu", stats });
-});
+};
+
+
+//! belirli bir veriye gore rapor oluşturup gönderme
+// belirli bir yil icin o yilin her ayinda kac tane ve hangi turlar baslayacak
+exports.getMonthlyPlan = async (req, res) => {
+  try {
+      // 1- parametre olarak gelen yili al
+  const year = Number(req.params.year);
+
+  //2- raporu olustur
+  const stats = await Tour.aggregate([
+    {
+      $unwind: {
+        path: "$startDates",
+      },
+    },
+    {
+      $match: {
+        startDates: {
+          $gte: new Date(`${year}-01-01`),
+          $lte: new Date(`${year}-12-31`),
+        },
+      },
+    },
+    {
+      $group: {
+        _id: {
+          $month: "$startDates",
+        },
+        count: {
+          $sum: 1,
+        },
+        tours: {
+          $push: "$name",
+        },
+      },
+    },
+    {
+      $addFields: {
+        month: "$_id",
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+      },
+    },
+    {
+      $sort: {
+        month: 1,
+      },
+    },
+  ]);
+
+  if(stats.length === 0){
+    return res.status(400).json({
+      message:`${year} yilinda herhangi bir tur baslamiyor`,
+    })
+  }
+  res.status(200).json({
+    message:`${year} yili icin aylik plan olusturuldu`,stats
+  })
+}
+
+catch (error) {
+    res.status(200).json({
+      message:`Aylik plan olusturulamadi`,
+      error : error.message
+    })
+}}
